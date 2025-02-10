@@ -1,6 +1,8 @@
 package lp.molekuly;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
@@ -15,8 +17,9 @@ public class App extends Application {
 
     private static final int WIDTH = 1000;
     private static final int HEIGHT = 1000;
-    private static final int RADIUS = 20;
-    private static final int COUNT_OF_MOLECULES = 50;
+    private static final int RADIUS = 50;
+    private static final int COUNT_OF_MOLECULES = 100;
+    private static final int POSSIBLE_TRIES = 5;
 
     private final Set<Molecule> molecules = new HashSet<>();
     private final Random rnd = new Random();
@@ -24,6 +27,7 @@ public class App extends Application {
     private int maxX;
     private int maxY;
     private Pane pane;
+    private boolean stop;
 
     @Override
     public void start(Stage stage) {
@@ -31,11 +35,33 @@ public class App extends Application {
         pane = new Pane();
         pane.setBackground(Background.fill(Color.BLACK));
         Scene scene = new Scene(pane, WIDTH, HEIGHT);
+        scene.setOnKeyPressed(keyEvent -> {
+            stop = !stop;
+            if (!stop) {
+                startThread();
+            }
+        });
         stage.setScene(scene);
+        stage.setOnCloseRequest(windowEvent -> System.exit(0));
         stage.show();
 
         setMax();
         newSet();
+        startThread();
+    }
+
+    private void startThread() {
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                while (!stop) {
+                    Platform.runLater(() -> molecules.forEach(Molecule::go));
+                    Thread.sleep(20);
+                }
+                return null;
+            }
+        };
+        new Thread(task).start();
     }
 
     private void setMax() {
@@ -54,7 +80,11 @@ public class App extends Application {
         double newX;
         double newY;
         int notCollisionMolecule;
+        int step = 0;
         do {
+            if (step++ == POSSIBLE_TRIES) {
+                return;
+            }
             newX = RADIUS / 2.0 + rnd.nextInt(maxX);
             newY = RADIUS / 2.0 + rnd.nextInt(maxY);
             notCollisionMolecule = 0;
@@ -69,7 +99,7 @@ public class App extends Application {
     }
 
     private void addMolecule(double newX, double newY) {
-        Molecule molecule = new Molecule(newX, newY, RADIUS / 2.0);
+        Molecule molecule = new Molecule(newX, newY, RADIUS / 2.0, maxX, maxY);
         molecules.add(molecule);
         pane.getChildren().add(molecule);
     }
