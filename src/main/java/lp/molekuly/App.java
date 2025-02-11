@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import lp.Manager;
 
@@ -14,10 +15,10 @@ import java.util.Random;
 
 public class App extends Application {
 
-    private static final int WIDTH = 1000;
+    private static final int WIDTH = 1500;
     private static final int HEIGHT = 1000;
     private static final int RADIUS = 100;
-    private static final int COUNT_OF_MOLECULES = 300;
+    private static final int COUNT_OF_MOLECULES = 20;
     private static final int POSSIBLE_TRIES = 5;
 
     private final Random rnd = new Random();
@@ -45,8 +46,19 @@ public class App extends Application {
         stage.show();
 
         setMax();
+        addRemovingCircle();
         newSet();
         startThread();
+    }
+
+    private void addRemovingCircle() {
+        Circle circle = new Circle();
+        circle.setStroke(Color.RED);
+        circle.setStrokeWidth(10);
+        circle.setRadius(RADIUS / 2.0 + 20);
+        circle.setCenterX(circle.getRadius() + 5);
+        circle.setCenterY(circle.getRadius() + 5);
+        pane.getChildren().add(circle);
     }
 
     private void startThread() {
@@ -54,7 +66,15 @@ public class App extends Application {
             @Override
             protected Void call() throws Exception {
                 while (!stop) {
-                    Platform.runLater(() -> manager.getMolecules().forEach(Molecule::go));
+                    manager.getMolecules().forEach(molecule -> Platform.runLater(() -> {
+                        if (molecule.getCenterX() <= RADIUS && molecule.getCenterY() <= RADIUS) {
+                            manager.getMolecules().remove(molecule);
+                            pane.getChildren().remove(molecule);
+                            next();
+                        } else {
+                            molecule.go();
+                        }
+                    }));
                     Thread.sleep(20);
                 }
                 return null;
