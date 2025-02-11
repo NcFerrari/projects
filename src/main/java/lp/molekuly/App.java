@@ -68,8 +68,9 @@ public class App extends Application {
                 while (!stop) {
                     manager.getMolecules().forEach(molecule -> Platform.runLater(() -> {
                         if (molecule.getCenterX() <= RADIUS && molecule.getCenterY() <= RADIUS) {
+                            molecule.stop();
+                            molecule.fallDown(pane);
                             manager.getMolecules().remove(molecule);
-                            pane.getChildren().remove(molecule);
                             next();
                         } else {
                             molecule.go();
