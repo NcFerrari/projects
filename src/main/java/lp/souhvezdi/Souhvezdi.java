@@ -54,17 +54,15 @@ public class Souhvezdi extends Application {
         pane = new Pane();
         events();
         pane.setBackground(Background.fill(Color.BLACK));
-        switch (variant) {
-            case Variants.A:
-                scene = new VariantaA(pane, maxWidth, maxHeight, this);
-                break;
-            case Variants.B:
-                scene = new VariantaB(pane, maxWidth, maxHeight, this);
-                break;
-            default:
+        scene = switch (variant) {
+            case Variants.A -> new VariantaA(pane, maxWidth, maxHeight, this);
+            case Variants.B -> new VariantaB(pane, maxWidth, maxHeight, this);
+            case Variants.C -> new VariantaC(pane, maxWidth, maxHeight, this);
+            default -> {
                 pane.setBackground(Background.fill(Color.GRAY));
-                scene = new Scene(pane, maxWidth, maxHeight);
-        }
+                yield new Scene(pane, maxWidth, maxHeight);
+            }
+        };
         scene.setOnKeyPressed(keyEvent -> {
             String letter = keyEvent.getText().toUpperCase();
             for (Variants v : Variants.values()) {
