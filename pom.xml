@@ -67,7 +67,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>vlakna.Manager</mainClass>
+                                    <mainClass>lp.Manager</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>

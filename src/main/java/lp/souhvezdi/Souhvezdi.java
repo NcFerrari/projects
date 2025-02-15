@@ -58,6 +58,7 @@ public class Souhvezdi extends Application {
             case Variants.A -> new VariantaA(pane, maxWidth, maxHeight, this);
             case Variants.B -> new VariantaB(pane, maxWidth, maxHeight, this);
             case Variants.C -> new VariantaC(pane, maxWidth, maxHeight, this);
+            case Variants.D -> new VariantaD(pane, maxWidth, maxHeight);
             default -> {
                 pane.setBackground(Background.fill(Color.GRAY));
                 yield new Scene(pane, maxWidth, maxHeight);

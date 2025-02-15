@@ -62,8 +62,8 @@ public class VariantaA extends Scene {
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             Star star = new Star(souhvezdi.getMaxWidth() / 2, souhvezdi.getMaxHeight() / 2, Souhvezdi.getStarSize(), Souhvezdi.getStarSize());
             pane.getChildren().add(star);
-            star.goTo(-souhvezdi.getMaxWidth() / 2 + pane.getInsets().getLeft() + rnd.nextInt((int) (souhvezdi.getMaxWidth() - Souhvezdi.getStarSize())),
-                    -souhvezdi.getMaxHeight() / 2 + pane.getInsets().getTop() + rnd.nextInt((int) (souhvezdi.getMaxHeight() - Souhvezdi.getStarSize())));
+            star.createTransition(-souhvezdi.getMaxWidth() / 2 + pane.getInsets().getLeft() + rnd.nextInt((int) (souhvezdi.getMaxWidth() - Souhvezdi.getStarSize())),
+                    -souhvezdi.getMaxHeight() / 2 + pane.getInsets().getTop() + rnd.nextInt((int) (souhvezdi.getMaxHeight() - Souhvezdi.getStarSize())), true);
         }));
 
         timeline.setCycleCount(Animation.INDEFINITE);

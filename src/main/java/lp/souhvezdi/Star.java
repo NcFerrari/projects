@@ -1,6 +1,5 @@
 package lp.souhvezdi;
 
-import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
@@ -15,12 +14,14 @@ public class Star extends Group {
     private final Line line2;
     private final Line line3;
     private final Line line4;
+    private final int travelTimeInMilliSeconds;
 
     public Star(double x, double y, double width, double height) {
-        this(x, y, width, height, 2);
+        this(x, y, width, height, 2_000);
     }
 
-    public Star(double x, double y, double width, double height, int travelTimeInSeconds) {
+    public Star(double x, double y, double width, double height, int travelTimeInMilliSeconds) {
+        this.travelTimeInMilliSeconds = travelTimeInMilliSeconds;
         x -= width / 2;
         y -= height / 2;
         line = new Line(x + width / 2, y, x + width / 2, y + height);
@@ -29,21 +30,22 @@ public class Star extends Group {
         line4 = new Line(x + width / 5, y + 4 * height / 5, x + 4 * width / 5, y + height / 5);
         setColor(Color.WHITE);
         getChildren().addAll(line, line2, line3, line4);
-
-        transition.setNode(this);
-        transition.setDuration(Duration.seconds(travelTimeInSeconds));
-        transition.setCycleCount(1);
-        setAutoSizeChildren(false);
     }
 
     public void removeFromPaneAfterFinished(Pane pane) {
         transition.setOnFinished(actionEvent -> pane.getChildren().remove(this));
     }
 
-    public void goTo(double x, double y) {
-        transition.setToX(x);
-        transition.setToY(y);
-        transition.play();
+    public TranslateTransition createTransition(double endX, double endY, boolean play) {
+        transition.setNode(this);
+        transition.setDuration(Duration.millis(travelTimeInMilliSeconds));
+        transition.setCycleCount(1);
+        transition.setToX(endX);
+        transition.setToY(endY);
+        if (play) {
+            transition.play();
+        }
+        return transition;
     }
 
     public void setColor(Color color) {
