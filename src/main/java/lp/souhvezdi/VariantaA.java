@@ -12,11 +12,11 @@ import java.util.Random;
 
 public class VariantaA extends Scene {
 
+    private final double starSize = 20;
     private final Random rnd = new Random();
     private final Pane pane;
     private double maxWidth;
     private double maxHeight;
-    private double starSize = 20;
 
     /**
      * Mohla by být i druhá a třetí varianta kódu:
