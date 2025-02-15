@@ -9,9 +9,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.effect.Light.Point;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
+import java.net.URISyntaxException;
+import java.util.Objects;
 import java.util.Random;
 
 public class VariantaD extends Scene {
@@ -37,6 +41,14 @@ public class VariantaD extends Scene {
             point.setX(mouseEvent.getX());
             point.setY(mouseEvent.getY());
             mouseTimeline.play();
+            try {
+                String soundPath = Objects.requireNonNull(getClass().getResource("/sounds/fly" + rnd.nextInt(2) + ".mp3")).toURI().toString();
+                Media sound = new Media(soundPath);
+                MediaPlayer mediaPlayer = new MediaPlayer(sound);
+                mediaPlayer.play();
+            } catch (URISyntaxException e) {
+                e.getReason();
+            }
         });
         setOnMouseReleased(mouseEvent -> {
             mouseTimeline.stop();
@@ -62,6 +74,7 @@ public class VariantaD extends Scene {
     }
 
     private void startFireworks(Pane pane, double width, double height) {
+
         fireworksTimeline = new Timeline(new KeyFrame(Duration.millis(400), event -> {
             Point localPoint = new Point(rnd.nextInt((int) width), height, 0, null);
             Timeline timeline = getTimeline(pane, localPoint);
@@ -73,6 +86,13 @@ public class VariantaD extends Scene {
                 createFireworks(localPoint.getX(), localPoint.getY(), pane);
             });
             yTimeline.play();
+            try {
+                String soundPath = Objects.requireNonNull(getClass().getResource("/sounds/fly" + rnd.nextInt(2) + ".mp3")).toURI().toString();
+                Media sound = new Media(soundPath);
+                MediaPlayer mediaPlayer = new MediaPlayer(sound);
+                mediaPlayer.play();
+            } catch (URISyntaxException ignored) {
+            }
         }));
         fireworksTimeline.setCycleCount(Animation.INDEFINITE);
     }
@@ -95,6 +115,14 @@ public class VariantaD extends Scene {
         explosionTransition.getChildren().addAll(animations);
         explosionTransition.setOnFinished(actionEvent -> pane.setCursor(Cursor.CROSSHAIR));
         explosionTransition.play();
+        try {
+            String soundPath = Objects.requireNonNull(getClass().getResource("/sounds/explosion" + rnd.nextInt(4) + ".mp3")).toURI().toString();
+            Media sound = new Media(soundPath);
+            MediaPlayer mediaPlayer = new MediaPlayer(sound);
+            mediaPlayer.play();
+        } catch (URISyntaxException e) {
+            e.getReason();
+        }
     }
 
     private Timeline getTimeline(Pane pane, Point point) {
