@@ -4,9 +4,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.util.Random;
@@ -61,7 +59,6 @@ public class VariantaA extends Scene {
      */
     public VariantaA(Pane pane, double width, double height, Souhvezdi souhvezdi) {
         super(pane, width, height);
-        pane.setBackground(Background.fill(Color.BLACK));
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             Star star = new Star(souhvezdi.getMaxWidth() / 2, souhvezdi.getMaxHeight() / 2, Souhvezdi.getStarSize(), Souhvezdi.getStarSize());
             pane.getChildren().add(star);
