@@ -1,7 +1,8 @@
 package lp;
 
-import lp.molekuly.App;
 import lp.molekuly.Molecule;
+import lp.souhvezdi.Souhvezdi;
+import lp.souhvezdi.Variants;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -27,6 +28,6 @@ public class Manager {
     }
 
     public static void main(String[] args) {
-        javafx.application.Application.launch(App.class);
+        javafx.application.Application.launch(Souhvezdi.class, Variants.A.name());
     }
 }

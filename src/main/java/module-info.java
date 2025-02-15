@@ -3,4 +3,5 @@ module projects {
     requires javafx.graphics;
 
     exports lp.molekuly;
+    exports lp.souhvezdi;
 }
