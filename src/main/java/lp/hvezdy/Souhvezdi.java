@@ -1,4 +1,4 @@
-package lp.souhvezdi;
+package lp.hvezdy;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

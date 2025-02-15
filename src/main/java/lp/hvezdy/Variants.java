@@ -1,4 +1,4 @@
-package lp.souhvezdi;
+package lp.hvezdy;
 
 public enum Variants {
     A, B, C, D, E, F, G;

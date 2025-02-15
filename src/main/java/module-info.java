@@ -4,5 +4,5 @@ module projects {
     requires java.desktop;
 
     exports lp.molekuly;
-    exports lp.souhvezdi;
+    exports lp.hvezdy;
 }

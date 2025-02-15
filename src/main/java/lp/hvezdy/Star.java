@@ -1,4 +1,4 @@
-package lp.souhvezdi;
+package lp.hvezdy;
 
 import javafx.animation.TranslateTransition;
 import javafx.scene.Group;

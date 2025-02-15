@@ -1,8 +1,8 @@
 package lp;
 
 import lp.molekuly.Molecule;
-import lp.souhvezdi.Souhvezdi;
-import lp.souhvezdi.Variants;
+import lp.hvezdy.Souhvezdi;
+import lp.hvezdy.Variants;
 
 import java.util.HashSet;
 import java.util.Set;
