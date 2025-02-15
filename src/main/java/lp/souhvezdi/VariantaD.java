@@ -6,6 +6,8 @@ import javafx.animation.ParallelTransition;
 import javafx.animation.Timeline;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.effect.Light.Point;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -14,44 +16,69 @@ import java.util.Random;
 
 public class VariantaD extends Scene {
 
+    private static final String START_TEXT = "Start";
+    private static final String STOP_TEXT = "Stop";
     private final Random rnd = new Random();
-    private final Animation[] animations = new Animation[45];
-    private double x;
-    private double y;
+    private boolean start = true;
+    private Timeline fireworksTimeline;
 
     public VariantaD(Pane pane, double width, double height) {
         super(pane, width, height);
         pane.setCursor(Cursor.CROSSHAIR);
-        Timeline timeline = getTimeline(pane);
+        Point point = new Point();
+        Timeline mouseTimeline = getTimeline(pane, point);
 
         setOnMouseDragged(mouseEvent -> {
             pane.setCursor(Cursor.NONE);
-            x = mouseEvent.getX();
-            y = mouseEvent.getY();
+            point.setX(mouseEvent.getX());
+            point.setY(mouseEvent.getY());
         });
         setOnMousePressed(mouseEvent -> {
-            x = mouseEvent.getX();
-            y = mouseEvent.getY();
-            timeline.play();
+            point.setX(mouseEvent.getX());
+            point.setY(mouseEvent.getY());
+            mouseTimeline.play();
         });
         setOnMouseReleased(mouseEvent -> {
-            timeline.stop();
-            createFireWorks(mouseEvent.getX(), mouseEvent.getY(), pane);
-            ParallelTransition explosionTransition = new ParallelTransition();
-            explosionTransition.getChildren().clear();
-            explosionTransition.getChildren().addAll(animations);
-            explosionTransition.setOnFinished(actionEvent -> pane.setCursor(Cursor.CROSSHAIR));
-            explosionTransition.play();
+            mouseTimeline.stop();
+            createFireworks(mouseEvent.getX(), mouseEvent.getY(), pane);
         });
 
-        Timeline timeline2 = new Timeline(new KeyFrame(Duration.millis(1000), event -> {
+        startFireworks(pane, width, height);
 
-        }));
-        timeline2.setCycleCount(Animation.INDEFINITE);
-        timeline2.play();
+        Button button = new Button(START_TEXT);
+        button.setPrefSize(75, 25);
+        button.setCursor(Cursor.HAND);
+        button.setOnAction(actionEvent -> {
+            if (start) {
+                fireworksTimeline.play();
+                button.setText(STOP_TEXT);
+            } else {
+                fireworksTimeline.stop();
+                button.setText(START_TEXT);
+            }
+            start = !start;
+        });
+        pane.getChildren().add(button);
     }
 
-    private void createFireWorks(double x, double y, Pane pane) {
+    private void startFireworks(Pane pane, double width, double height) {
+        fireworksTimeline = new Timeline(new KeyFrame(Duration.millis(400), event -> {
+            Point localPoint = new Point(rnd.nextInt((int) width), height, 0, null);
+            Timeline timeline = getTimeline(pane, localPoint);
+            timeline.play();
+            Timeline yTimeline = new Timeline(new KeyFrame(Duration.millis(2), yMoving -> localPoint.setY(localPoint.getY() - 1)));
+            yTimeline.setCycleCount((int) (width / 2 + rnd.nextInt((int) (width / 4))));
+            yTimeline.setOnFinished(actionEvent -> {
+                timeline.stop();
+                createFireworks(localPoint.getX(), localPoint.getY(), pane);
+            });
+            yTimeline.play();
+        }));
+        fireworksTimeline.setCycleCount(Animation.INDEFINITE);
+    }
+
+    private void createFireworks(double x, double y, Pane pane) {
+        Animation[] animations = new Animation[45];
         for (int i = 0; i < animations.length; i++) {
             int radius = 300 + rnd.nextInt(75);
             double angle = i * (double) 360 / animations.length;
@@ -63,11 +90,16 @@ public class VariantaD extends Scene {
             star.removeFromPaneAfterFinished(pane);
             animations[i] = star.createTransition(newX, newY, false);
         }
+        ParallelTransition explosionTransition = new ParallelTransition();
+        explosionTransition.getChildren().clear();
+        explosionTransition.getChildren().addAll(animations);
+        explosionTransition.setOnFinished(actionEvent -> pane.setCursor(Cursor.CROSSHAIR));
+        explosionTransition.play();
     }
 
-    private Timeline getTimeline(Pane pane) {
+    private Timeline getTimeline(Pane pane, Point point) {
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(20), event -> {
-            Star star = new Star(x, y, Souhvezdi.getStarSize(), Souhvezdi.getStarSize(), 600);
+            Star star = new Star(point.getX(), point.getY(), Souhvezdi.getStarSize(), Souhvezdi.getStarSize(), 600);
             star.setColor(Color.rgb(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)));
             star.removeFromPaneAfterFinished(pane);
             pane.getChildren().add(star);
