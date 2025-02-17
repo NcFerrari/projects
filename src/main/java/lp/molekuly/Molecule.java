@@ -91,8 +91,9 @@ public class Molecule extends Circle {
 
         for (Molecule molecule : manager.getMolecules()) {
             if (molecule != this && molecule.getDistance(newX, newY) < getRadius() + molecule.getRadius()) {
-                xSpeed = xSpeed + molecule.xSpeed - (molecule.xSpeed = xSpeed);
-                ySpeed = ySpeed + molecule.ySpeed - (molecule.ySpeed = ySpeed);
+                double temp = xSpeed;
+                xSpeed = molecule.xSpeed;
+                molecule.xSpeed = temp;
                 collision = true;
             }
         }

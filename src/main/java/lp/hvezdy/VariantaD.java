@@ -91,6 +91,7 @@ public class VariantaD extends Scene {
                 MediaPlayer mediaPlayer = new MediaPlayer(sound);
                 mediaPlayer.play();
             } catch (URISyntaxException ignored) {
+                throw new UnsupportedOperationException();
             }
         }));
         fireworksTimeline.setCycleCount(Animation.INDEFINITE);
