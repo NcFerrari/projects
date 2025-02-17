@@ -36,6 +36,7 @@ public class VariantaC extends Scene {
         setOnMousePressed(mouseEvent -> {
             x = mouseEvent.getX();
             y = mouseEvent.getY();
+            Souhvezdi.ANIMATIONS.add(timeline);
             timeline.play();
         });
         setOnMouseReleased(mouseEvent -> timeline.stop());

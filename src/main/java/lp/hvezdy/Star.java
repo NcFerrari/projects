@@ -43,6 +43,7 @@ public class Star extends Group {
         translateTransition.setToX(endX);
         translateTransition.setToY(endY);
         if (play) {
+            Souhvezdi.ANIMATIONS.add(translateTransition);
             translateTransition.play();
         }
         return translateTransition;
@@ -65,6 +66,7 @@ public class Star extends Group {
         ParallelTransition parallelTransition = new ParallelTransition();
         parallelTransition.getChildren().addAll(scaleTransition, translateTransition);
         parallelTransition.setOnFinished(actionEvent -> pane.getChildren().remove(this));
+        Souhvezdi.ANIMATIONS.add(parallelTransition);
         parallelTransition.play();
     }
 

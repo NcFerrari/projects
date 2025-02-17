@@ -24,6 +24,7 @@ public class VariantaH extends Scene {
             pane.getChildren().add(star);
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
+        Souhvezdi.ANIMATIONS.add(timeline);
         timeline.play();
     }
 }

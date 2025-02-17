@@ -35,6 +35,7 @@ public class SuperStar extends Group {
     public void shine() {
         shineTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> beams.forEach(Beam::start)));
         shineTimeline.setCycleCount(Animation.INDEFINITE);
+        Souhvezdi.ANIMATIONS.add(shineTimeline);
         shineTimeline.play();
     }
 
@@ -54,6 +55,7 @@ public class SuperStar extends Group {
                 pane.getChildren().remove(this);
             }
         });
+        Souhvezdi.ANIMATIONS.add(translateTransition);
         translateTransition.play();
     }
 
@@ -75,10 +77,12 @@ public class SuperStar extends Group {
 
         public void start() {
             double distance = maxRange / 10 + rnd.nextInt((int) (9 * maxRange / 10));
-            new Timeline(new KeyFrame(Duration.millis(250),
+            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(250),
                     new KeyValue(endXProperty(), getStartX() + distance * Math.cos(Math.toRadians(angle))),
                     new KeyValue(endYProperty(), getStartY() + distance * Math.sin(Math.toRadians(angle)))
-            )).play();
+            ));
+            Souhvezdi.ANIMATIONS.add(timeline);
+            timeline.play();
         }
     }
 }

@@ -26,6 +26,7 @@ public class VariantaB extends Scene {
         }));
 
         timeline.setCycleCount(Animation.INDEFINITE);
+        Souhvezdi.ANIMATIONS.add(timeline);
         timeline.play();
     }
 }

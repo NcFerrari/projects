@@ -21,7 +21,8 @@ public class VariantaG extends Scene {
             star.shine();
             star.move(pane, -pane.getWidth() / 2 + rnd.nextInt((int) pane.getWidth()), -pane.getHeight() / 2 + rnd.nextInt((int) pane.getHeight()), false);
         }));
-        timeline.setCycleCount(400);
+        timeline.setCycleCount(200);
+        Souhvezdi.ANIMATIONS.add(timeline);
         timeline.play();
     }
 }

@@ -40,6 +40,7 @@ public class VariantaD extends Scene {
         setOnMousePressed(mouseEvent -> {
             point.setX(mouseEvent.getX());
             point.setY(mouseEvent.getY());
+            Souhvezdi.ANIMATIONS.add(mouseTimeline);
             mouseTimeline.play();
             try {
                 String soundPath = Objects.requireNonNull(getClass().getResource("/sounds/fly" + rnd.nextInt(2) + ".mp3")).toURI().toString();
@@ -62,6 +63,7 @@ public class VariantaD extends Scene {
         button.setCursor(Cursor.HAND);
         button.setOnAction(actionEvent -> {
             if (start) {
+                Souhvezdi.ANIMATIONS.add(fireworksTimeline);
                 fireworksTimeline.play();
                 button.setText(STOP_TEXT);
             } else {
@@ -77,6 +79,7 @@ public class VariantaD extends Scene {
         fireworksTimeline = new Timeline(new KeyFrame(Duration.millis(400), event -> {
             Point localPoint = new Point(rnd.nextInt((int) width), height, 0, null);
             Timeline timeline = getTimeline(pane, localPoint);
+            Souhvezdi.ANIMATIONS.add(timeline);
             timeline.play();
             Timeline yTimeline = new Timeline(new KeyFrame(Duration.millis(2), yMoving -> localPoint.setY(localPoint.getY() - 1)));
             yTimeline.setCycleCount((int) (width / 2 + rnd.nextInt((int) (width / 4))));
@@ -84,6 +87,7 @@ public class VariantaD extends Scene {
                 timeline.stop();
                 createFireworks(localPoint.getX(), localPoint.getY(), pane);
             });
+            Souhvezdi.ANIMATIONS.add(yTimeline);
             yTimeline.play();
             try {
                 String soundPath = Objects.requireNonNull(getClass().getResource("/sounds/fly" + rnd.nextInt(2) + ".mp3")).toURI().toString();
@@ -114,6 +118,7 @@ public class VariantaD extends Scene {
         explosionTransition.getChildren().clear();
         explosionTransition.getChildren().addAll(animations);
         explosionTransition.setOnFinished(actionEvent -> pane.setCursor(Cursor.CROSSHAIR));
+        Souhvezdi.ANIMATIONS.add(explosionTransition);
         explosionTransition.play();
         try {
             String soundPath = Objects.requireNonNull(getClass().getResource("/sounds/explosion" + rnd.nextInt(4) + ".mp3")).toURI().toString();

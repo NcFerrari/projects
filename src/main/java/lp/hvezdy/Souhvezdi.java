@@ -1,5 +1,6 @@
 package lp.hvezdy;
 
+import javafx.animation.Animation;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Background;
@@ -7,10 +8,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Souhvezdi extends Application {
 
+    protected static final List<Animation> ANIMATIONS = new ArrayList<>();
     private static final double STAR_SIZE = 20;
     private static final double MAX_WIDTH = 1300;
     private static final double MAX_HEIGHT = 1000;
@@ -51,6 +54,8 @@ public class Souhvezdi extends Application {
             String letter = keyEvent.getText().toUpperCase();
             for (Variants v : Variants.values()) {
                 if (letter.equals(v.name())) {
+                    ANIMATIONS.forEach(Animation::stop);
+                    ANIMATIONS.clear();
                     setVariant(Variants.valueOf(letter));
                     break;
                 }
