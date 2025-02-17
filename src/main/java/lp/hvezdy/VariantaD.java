@@ -74,7 +74,6 @@ public class VariantaD extends Scene {
     }
 
     private void startFireworks(Pane pane, double width, double height) {
-
         fireworksTimeline = new Timeline(new KeyFrame(Duration.millis(400), event -> {
             Point localPoint = new Point(rnd.nextInt((int) width), height, 0, null);
             Timeline timeline = getTimeline(pane, localPoint);
