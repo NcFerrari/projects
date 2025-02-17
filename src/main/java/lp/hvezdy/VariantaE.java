@@ -44,7 +44,8 @@ public class VariantaE extends Scene {
     }
 
     private void createStar(double starX, double starY, double width, double height) {
-        Star2 star = new Star2(starX, starY, 1 + rnd.nextInt(2));
+        int size = 1 + rnd.nextInt(2);
+        Star star = new Star(starX, starY, size, size);
         star.setColor(color);
         pane.getChildren().add(star);
         if (starY < (height / width * starX)) {

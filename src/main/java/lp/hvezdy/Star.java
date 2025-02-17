@@ -1,5 +1,7 @@
 package lp.hvezdy;
 
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
@@ -9,7 +11,7 @@ import javafx.util.Duration;
 
 public class Star extends Group {
 
-    private final TranslateTransition transition = new TranslateTransition();
+    private final TranslateTransition translateTransition = new TranslateTransition();
     private final Line line;
     private final Line line2;
     private final Line line3;
@@ -32,18 +34,38 @@ public class Star extends Group {
     }
 
     public void removeFromPaneAfterFinished(Pane pane) {
-        transition.setOnFinished(actionEvent -> pane.getChildren().remove(this));
+        translateTransition.setOnFinished(actionEvent -> pane.getChildren().remove(this));
     }
 
     public TranslateTransition createTransition(double endX, double endY, boolean play) {
-        transition.setNode(this);
-        transition.setDuration(Duration.millis(travelTimeInMilliSeconds));
-        transition.setToX(endX);
-        transition.setToY(endY);
+        translateTransition.setNode(this);
+        translateTransition.setDuration(Duration.millis(travelTimeInMilliSeconds));
+        translateTransition.setToX(endX);
+        translateTransition.setToY(endY);
         if (play) {
-            transition.play();
+            translateTransition.play();
         }
-        return transition;
+        return translateTransition;
+    }
+
+    public void start(Pane pane, double x, double y) {
+        final Duration duration = Duration.millis(1000);
+
+        ScaleTransition scaleTransition = new ScaleTransition();
+        scaleTransition.setNode(this);
+        scaleTransition.setDuration(duration);
+        scaleTransition.setByX(1);
+        scaleTransition.setByY(scaleTransition.getByX());
+
+        translateTransition.setNode(this);
+        translateTransition.setDuration(duration);
+        translateTransition.setToX(x);
+        translateTransition.setToY(y);
+
+        ParallelTransition parallelTransition = new ParallelTransition();
+        parallelTransition.getChildren().addAll(scaleTransition, translateTransition);
+        parallelTransition.setOnFinished(actionEvent -> pane.getChildren().remove(this));
+        parallelTransition.play();
     }
 
     public void setColor(Color color) {
