@@ -2,10 +2,11 @@ package lp.hvezdy;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class SuperStar extends Group {
     private final List<Beam> beams = new ArrayList<>();
 
     public SuperStar(double x, double y, double range, Color color) {
-        this(x, y, range, color, 40);
+        this(x, y, range, color, 50);
     }
 
     public SuperStar(double x, double y, double range, Color color, int countOfBeams) {
@@ -29,39 +30,33 @@ public class SuperStar extends Group {
     }
 
     public void shine() {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100), event -> beams.forEach(Beam::setDistance)));
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100), event -> beams.forEach(Beam::start)));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
 
-    private static class Beam extends Polygon {
+    private static class Beam extends Line {
 
         private final Random rnd = new Random();
         private final double maxRange;
         private final double angle;
 
         Beam(double x, double y, double range, double angle, Color color) {
-            super();
+            super(x, y, 0, 0);
             maxRange = range;
             this.angle = angle;
-            getPoints().add(x);
-            getPoints().add(y);
-            getPoints().add(x + range * Math.cos(Math.toRadians(angle)));
-            getPoints().add(y + range * Math.sin(Math.toRadians(angle)));
+            setEndX(x + range * Math.cos(Math.toRadians(angle)));
+            setEndY(y + range * Math.sin(Math.toRadians(angle)));
             setStroke(color);
             setStrokeWidth(1.5);
         }
 
-        public void setDistance() {
-            double distance = maxRange / 2 + rnd.nextInt((int) (maxRange / 2));
-            getPoints().set(2, getPoints().getFirst() + distance * Math.cos(Math.toRadians(angle)));
-            getPoints().set(3, getPoints().get(1) + distance * Math.sin(Math.toRadians(angle)));
-            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(50), event -> {
-                getPoints().set(2, getPoints().getFirst() + distance * Math.cos(Math.toRadians(angle)));
-                getPoints().set(3, getPoints().get(1) + distance * Math.sin(Math.toRadians(angle)));
-            }));
-            timeline.setCycleCount(1);
-            timeline.play();
+        public void start() {
+            double distance = maxRange / 10 + rnd.nextInt((int) (9 * maxRange / 10));
+            new Timeline(new KeyFrame(Duration.millis(250),
+                    new KeyValue(endXProperty(), getStartX() + distance * Math.cos(Math.toRadians(angle))),
+                    new KeyValue(endYProperty(), getStartY() + distance * Math.sin(Math.toRadians(angle)))
+            )).play();
         }
     }
 }
