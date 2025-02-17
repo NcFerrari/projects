@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.control.Slider;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -19,6 +20,7 @@ public class VariantaE extends Scene {
     private final Slider sliderG;
     private final Slider sliderB;
     private Color color = Color.WHITE;
+    private boolean randomize;
 
     public VariantaE(Pane pane) {
         super(pane, pane.getPrefWidth(), pane.getPrefHeight());
@@ -32,6 +34,15 @@ public class VariantaE extends Scene {
         sliderG.valueProperty().addListener((observableValue, number, t1) -> changeColor());
         sliderB.valueProperty().addListener((observableValue, number, t1) -> changeColor());
         pane.getChildren().addAll(sliderR, sliderG, sliderB);
+        ToggleButton button = new ToggleButton("Random");
+        button.setLayoutX(140);
+        button.setOnAction(actionEvent -> {
+            sliderR.setDisable(button.isSelected());
+            sliderG.setDisable(button.isSelected());
+            sliderB.setDisable(button.isSelected());
+            randomize = !randomize;
+        });
+        pane.getChildren().add(button);
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2), event -> {
             double starX = rnd.nextInt((int) pane.getWidth());
@@ -46,7 +57,11 @@ public class VariantaE extends Scene {
     private void createStar(double starX, double starY, double width, double height) {
         int size = 1 + rnd.nextInt(2);
         Star star = new Star(starX, starY, size, size);
-        star.setColor(color);
+        if (randomize) {
+            star.setColor(Color.rgb(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)));
+        } else {
+            star.setColor(color);
+        }
         pane.getChildren().add(star);
         if (starY < (height / width * starX)) {
             if (starY < (starX * (-height / width) + height)) {
