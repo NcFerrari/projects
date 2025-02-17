@@ -26,8 +26,8 @@ public class VariantaD extends Scene {
     private boolean start = true;
     private Timeline fireworksTimeline;
 
-    public VariantaD(Pane pane, double width, double height) {
-        super(pane, width, height);
+    public VariantaD(Pane pane) {
+        super(pane, pane.getPrefWidth(), pane.getPrefHeight());
         pane.setCursor(Cursor.CROSSHAIR);
         Point point = new Point();
         Timeline mouseTimeline = getTimeline(pane, point);
@@ -55,7 +55,7 @@ public class VariantaD extends Scene {
             createFireworks(mouseEvent.getX(), mouseEvent.getY(), pane);
         });
 
-        startFireworks(pane, width, height);
+        startFireworks(pane, pane.getWidth(), pane.getHeight());
 
         Button button = new Button(START_TEXT);
         button.setPrefSize(75, 25);

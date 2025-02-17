@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.util.Random;
@@ -57,13 +58,14 @@ public class VariantaA extends Scene {
      * <p>
      * Jenže ty nejsou tak čisté řešení
      */
-    public VariantaA(Pane pane, double width, double height, Souhvezdi souhvezdi) {
-        super(pane, width, height);
+    public VariantaA(Pane pane) {
+        super(pane, pane.getPrefWidth(), pane.getPrefHeight());
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(50), event -> {
-            Star star = new Star(souhvezdi.getMaxWidth() / 2, souhvezdi.getMaxHeight() / 2, Souhvezdi.getStarSize(), Souhvezdi.getStarSize());
+            Star star = new Star(pane.getWidth() / 2, pane.getHeight() / 2, Souhvezdi.getStarSize(), Souhvezdi.getStarSize());
+            star.setColor(Color.WHITE);
             pane.getChildren().add(star);
-            star.createTransition(-souhvezdi.getMaxWidth() / 2 + pane.getInsets().getLeft() + rnd.nextInt((int) (souhvezdi.getMaxWidth() - Souhvezdi.getStarSize())),
-                    -souhvezdi.getMaxHeight() / 2 + pane.getInsets().getTop() + rnd.nextInt((int) (souhvezdi.getMaxHeight() - Souhvezdi.getStarSize())), true);
+            star.createTransition(-pane.getWidth() / 2 + pane.getInsets().getLeft() + rnd.nextInt((int) (pane.getWidth() - Souhvezdi.getStarSize())),
+                    -pane.getHeight() / 2 + pane.getInsets().getTop() + rnd.nextInt((int) (pane.getHeight() - Souhvezdi.getStarSize())), true);
         }));
 
         timeline.setCycleCount(Animation.INDEFINITE);

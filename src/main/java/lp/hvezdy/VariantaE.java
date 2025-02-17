@@ -4,7 +4,9 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.util.Random;
@@ -13,11 +15,25 @@ public class VariantaE extends Scene {
 
     private final Random rnd = new Random();
     private final Pane pane;
+    private final Slider sliderR;
+    private final Slider sliderG;
+    private final Slider sliderB;
+    private Color color = Color.WHITE;
 
     public VariantaE(Pane pane) {
-        super(pane, pane.getWidth(), pane.getHeight());
+        super(pane, pane.getPrefWidth(), pane.getPrefHeight());
         this.pane = pane;
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(5), event -> {
+        sliderR = new Slider(0, 255, 255);
+        sliderG = new Slider(0, 255, 255);
+        sliderB = new Slider(0, 255, 255);
+        sliderG.setLayoutY(14);
+        sliderB.setLayoutY(28);
+        sliderR.valueProperty().addListener((observableValue, number, t1) -> changeColor());
+        sliderG.valueProperty().addListener((observableValue, number, t1) -> changeColor());
+        sliderB.valueProperty().addListener((observableValue, number, t1) -> changeColor());
+        pane.getChildren().addAll(sliderR, sliderG, sliderB);
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(2), event -> {
             double starX = rnd.nextInt((int) pane.getWidth());
             double starY = rnd.nextInt((int) pane.getHeight());
             createStar(starX, starY, pane.getWidth(), pane.getHeight());
@@ -29,6 +45,7 @@ public class VariantaE extends Scene {
 
     private void createStar(double starX, double starY, double width, double height) {
         Star2 star = new Star2(starX, starY, 1 + rnd.nextInt(2));
+        star.setColor(color);
         pane.getChildren().add(star);
         if (starY < (height / width * starX)) {
             if (starY < (starX * (-height / width) + height)) {
@@ -67,5 +84,9 @@ public class VariantaE extends Scene {
         double k = (secondY - firstY) / (secondX - firstX);
         double q = firstY - firstX * k;
         return new double[]{k, q};
+    }
+
+    private void changeColor() {
+        color = Color.rgb((int) sliderR.getValue(), (int) sliderG.getValue(), (int) sliderB.getValue());
     }
 }

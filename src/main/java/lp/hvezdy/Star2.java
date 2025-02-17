@@ -11,12 +11,13 @@ import javafx.util.Duration;
 
 public class Star2 extends Group {
 
+    private final Circle circle;
+
     public Star2(double x, double y, int radius) {
-        Circle circle = new Circle();
+        circle = new Circle();
         circle.setCenterX(x);
         circle.setCenterY(y);
         circle.setRadius(radius);
-        circle.setFill(Color.WHITE);
         getChildren().add(circle);
     }
 
@@ -39,5 +40,9 @@ public class Star2 extends Group {
         parallelTransition.getChildren().addAll(scaleTransition, translateTransition);
         parallelTransition.setOnFinished(actionEvent -> pane.getChildren().remove(this));
         parallelTransition.play();
+    }
+
+    public void setColor(Color color) {
+        circle.setFill(color);
     }
 }

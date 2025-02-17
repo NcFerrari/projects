@@ -12,29 +12,12 @@ import java.util.List;
 public class Souhvezdi extends Application {
 
     private static final double STAR_SIZE = 20;
-    private double maxWidth = 1300;
-    private double maxHeight = 1000;
+    private static final double MAX_WIDTH = 1300;
+    private static final double MAX_HEIGHT = 1000;
     private Stage stage;
-    private Pane pane;
 
     public static double getStarSize() {
         return STAR_SIZE;
-    }
-
-    public double getMaxHeight() {
-        return maxHeight;
-    }
-
-    public void setMaxHeight(double maxHeight) {
-        this.maxHeight = maxHeight;
-    }
-
-    public double getMaxWidth() {
-        return maxWidth;
-    }
-
-    public void setMaxWidth(double maxWidth) {
-        this.maxWidth = maxWidth;
     }
 
     @Override
@@ -51,18 +34,18 @@ public class Souhvezdi extends Application {
 
     private void setVariant(Variants variant) {
         Scene scene;
-        pane = new Pane();
-        events();
+        Pane pane = new Pane();
+        pane.setPrefSize(MAX_WIDTH, MAX_HEIGHT);
         pane.setBackground(Background.fill(Color.BLACK));
         scene = switch (variant) {
-            case Variants.A -> new VariantaA(pane, maxWidth, maxHeight, this);
-            case Variants.B -> new VariantaB(pane, maxWidth, maxHeight, this);
-            case Variants.C -> new VariantaC(pane, maxWidth, maxHeight, this);
-            case Variants.D -> new VariantaD(pane, maxWidth, maxHeight);
+            case Variants.A -> new VariantaA(pane);
+            case Variants.B -> new VariantaB(pane);
+            case Variants.C -> new VariantaC(pane);
+            case Variants.D -> new VariantaD(pane);
             case Variants.E -> new VariantaE(pane);
             default -> {
                 pane.setBackground(Background.fill(Color.GRAY));
-                yield new Scene(pane, maxWidth, maxHeight);
+                yield new Scene(pane, MAX_WIDTH, MAX_HEIGHT);
             }
         };
         scene.setOnKeyPressed(keyEvent -> {
@@ -78,10 +61,5 @@ public class Souhvezdi extends Application {
             }
         });
         stage.setScene(scene);
-    }
-
-    private void events() {
-        pane.widthProperty().addListener((observableValue, number, t1) -> setMaxWidth(t1.doubleValue()));
-        pane.heightProperty().addListener((observableValue, number, t1) -> setMaxHeight(t1.doubleValue()));
     }
 }

@@ -28,7 +28,6 @@ public class Star extends Group {
         line2 = new Line(x, y + height / 2, x + width, y + height / 2);
         line3 = new Line(x + width / 5, y + height / 5, x + 4 * width / 5, y + 4 * height / 5);
         line4 = new Line(x + width / 5, y + 4 * height / 5, x + 4 * width / 5, y + height / 5);
-        setColor(Color.WHITE);
         getChildren().addAll(line, line2, line3, line4);
     }
 
@@ -39,7 +38,6 @@ public class Star extends Group {
     public TranslateTransition createTransition(double endX, double endY, boolean play) {
         transition.setNode(this);
         transition.setDuration(Duration.millis(travelTimeInMilliSeconds));
-        transition.setCycleCount(1);
         transition.setToX(endX);
         transition.setToY(endY);
         if (play) {
