@@ -28,6 +28,6 @@ public class Manager {
     }
 
     public static void main(String[] args) {
-        javafx.application.Application.launch(Souhvezdi.class, Variants.F.name());
+        javafx.application.Application.launch(Souhvezdi.class, Variants.G.name());
     }
 }

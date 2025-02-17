@@ -4,7 +4,9 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.scene.Group;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
@@ -16,6 +18,7 @@ import java.util.Random;
 public class SuperStar extends Group {
 
     private final List<Beam> beams = new ArrayList<>();
+    private Timeline shineTimeline;
 
     public SuperStar(double x, double y, double range, Color color) {
         this(x, y, range, color, 50);
@@ -30,9 +33,28 @@ public class SuperStar extends Group {
     }
 
     public void shine() {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100), event -> beams.forEach(Beam::start)));
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+        shineTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> beams.forEach(Beam::start)));
+        shineTimeline.setCycleCount(Animation.INDEFINITE);
+        shineTimeline.play();
+    }
+
+    public void move(Pane pane, double moveByX, double moveByY) {
+        move(pane, moveByX, moveByY, true);
+    }
+
+    public void move(Pane pane, double moveByX, double moveByY, boolean remove) {
+        TranslateTransition translateTransition = new TranslateTransition();
+        translateTransition.setDuration(Duration.millis(2_000));
+        translateTransition.setNode(this);
+        translateTransition.setByX(moveByX);
+        translateTransition.setByY(moveByY);
+        translateTransition.setOnFinished(actionEvent -> {
+            if (remove) {
+                shineTimeline.stop();
+                pane.getChildren().remove(this);
+            }
+        });
+        translateTransition.play();
     }
 
     private static class Beam extends Line {
@@ -45,8 +67,8 @@ public class SuperStar extends Group {
             super(x, y, 0, 0);
             maxRange = range;
             this.angle = angle;
-            setEndX(x + range * Math.cos(Math.toRadians(angle)));
-            setEndY(y + range * Math.sin(Math.toRadians(angle)));
+            setEndX(x + 0 * Math.cos(Math.toRadians(angle)));
+            setEndY(y + 0 * Math.sin(Math.toRadians(angle)));
             setStroke(color);
             setStrokeWidth(1.5);
         }
