@@ -5,6 +5,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.util.Duration;
 
 import java.util.Random;
@@ -12,42 +14,52 @@ import java.util.Random;
 public class VariantaE extends Scene {
 
     private final Random rnd = new Random();
+    private final Pane pane;
 
     public VariantaE(Pane pane, double width, double height) {
         super(pane, width, height);
-        double stredX = pane.getWidth() / 2;
-        double stredY = pane.getHeight() / 2;
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(50), event -> {
+        this.pane = pane;
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(20), event -> {
             double starX = rnd.nextInt((int) pane.getWidth());
             double starY = rnd.nextInt((int) pane.getHeight());
             Star2 star = new Star2(starX, starY, 1 + rnd.nextInt(3));
-
-            double k = (starY - stredY) / (starX - stredX);
-            double q = starY - starX * k;
-            double noveX;
-            double noveY;
-            if (starX - stredX >= starY - stredY) {
-                noveX = starX >= stredX ? width : 0;
-                noveY = k * noveX + q;
-            } else {
-                noveY = starY >= stredY ? height : 0;
-                noveX = (noveY - q) / k;
-            }
-            star.start(noveX - starX, noveY - starY);
             pane.getChildren().add(star);
+            if (starY < (height / width * starX)) {
+                if (starY < (starX * (-height / width) + height)) {
+                    star.start(pane, getFinalX(starX, starY, 0) - starX, -starY);
+                } else {
+                    star.start(pane, width - starX, starY - getFinalY(starX, starY, 0));
+                }
+            } else {
+                if (starY < (starX * (-height / width) + height)) {
+                    star.start(pane, -starX, getFinalY(starX, starY, 0) - starY);
+                } else {
+                    star.start(pane, starX - getFinalX(starX, starY, 0), height - starY);
+                }
+            }
         }));
 
         timeline.setCycleCount(Animation.INDEFINITE);
-//        timeline.play();
+        timeline.play();
+    }
 
-        pane.setOnMouseDragged(mouseEvent -> {
-            double starX = mouseEvent.getX();
-            double starY = mouseEvent.getY();
-            Star2 star = new Star2(starX, starY, 1 + rnd.nextInt(3));
+    private double getFinalX(double existingPointX, double existingPointY, double yOfDesiredPoint) {
+        double[] kq = getKQ(existingPointX, existingPointY, pane.getWidth() / 2.0, pane.getHeight() / 2.0);
+        double k = kq[0];
+        double q = kq[1];
+        return (yOfDesiredPoint - q) / k;
+    }
 
+    private double getFinalY(double existingPointX, double existingPointY, double xOfDesiredPoint) {
+        double[] kq = getKQ(existingPointX, existingPointY, pane.getWidth() / 2.0, pane.getHeight() / 2.0);
+        double k = kq[0];
+        double q = kq[1];
+        return k * xOfDesiredPoint + q;
+    }
 
-//            star.start(noveX - starX, noveY - starY);
-            pane.getChildren().add(star);
-        });
+    private double[] getKQ(double firstX, double firstY, double secondX, double secondY) {
+        double k = (secondY - firstY) / (secondX - firstX);
+        double q = firstY - firstX * k;
+        return new double[]{k, q};
     }
 }
