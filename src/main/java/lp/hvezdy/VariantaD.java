@@ -137,4 +137,8 @@ public class VariantaD extends Scene {
         timeline.setCycleCount(Animation.INDEFINITE);
         return timeline;
     }
+
+    public void setOnSwitching() {
+        fireworksTimeline.stop();
+    }
 }

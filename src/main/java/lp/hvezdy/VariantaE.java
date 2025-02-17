@@ -16,31 +16,39 @@ public class VariantaE extends Scene {
     private final Random rnd = new Random();
     private final Pane pane;
 
-    public VariantaE(Pane pane, double width, double height) {
-        super(pane, width, height);
+    public VariantaE(Pane pane) {
+        super(pane, pane.getWidth(), pane.getHeight());
         this.pane = pane;
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(20), event -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(5), event -> {
             double starX = rnd.nextInt((int) pane.getWidth());
             double starY = rnd.nextInt((int) pane.getHeight());
-            Star2 star = new Star2(starX, starY, 1 + rnd.nextInt(3));
-            pane.getChildren().add(star);
-            if (starY < (height / width * starX)) {
-                if (starY < (starX * (-height / width) + height)) {
-                    star.start(pane, getFinalX(starX, starY, 0) - starX, -starY);
-                } else {
-                    star.start(pane, width - starX, starY - getFinalY(starX, starY, 0));
-                }
-            } else {
-                if (starY < (starX * (-height / width) + height)) {
-                    star.start(pane, -starX, getFinalY(starX, starY, 0) - starY);
-                } else {
-                    star.start(pane, starX - getFinalX(starX, starY, 0), height - starY);
-                }
-            }
+            createStar(starX, starY, pane.getWidth(), pane.getHeight());
         }));
 
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+    }
+
+    private void createStar(double starX, double starY, double width, double height) {
+        Star2 star = new Star2(starX, starY, 1 + rnd.nextInt(2));
+        pane.getChildren().add(star);
+        if (starY < (height / width * starX)) {
+            if (starY < (starX * (-height / width) + height)) {
+                //up quarter
+                star.start(pane, getFinalX(starX, starY, 0) - starX, -starY);
+            } else {
+                //right quarter
+                star.start(pane, width - starX, getFinalY(starX, starY, width) - starY);
+            }
+        } else {
+            if (starY < (starX * (-height / width) + height)) {
+                //left quarter
+                star.start(pane, -starX, getFinalY(starX, starY, 0) - starY);
+            } else {
+                //bottom quarter
+                star.start(pane, getFinalX(starX, starY, height) - starX, height - starY);
+            }
+        }
     }
 
     private double getFinalX(double existingPointX, double existingPointY, double yOfDesiredPoint) {

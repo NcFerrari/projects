@@ -59,7 +59,7 @@ public class Souhvezdi extends Application {
             case Variants.B -> new VariantaB(pane, maxWidth, maxHeight, this);
             case Variants.C -> new VariantaC(pane, maxWidth, maxHeight, this);
             case Variants.D -> new VariantaD(pane, maxWidth, maxHeight);
-            case Variants.E -> new VariantaE(pane, maxWidth, maxHeight);
+            case Variants.E -> new VariantaE(pane);
             default -> {
                 pane.setBackground(Background.fill(Color.GRAY));
                 yield new Scene(pane, maxWidth, maxHeight);
@@ -72,6 +72,9 @@ public class Souhvezdi extends Application {
                     setVariant(Variants.valueOf(letter));
                     break;
                 }
+            }
+            if (scene instanceof VariantaD varianta) {
+                varianta.setOnSwitching();
             }
         });
         stage.setScene(scene);

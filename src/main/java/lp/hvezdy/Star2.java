@@ -21,24 +21,22 @@ public class Star2 extends Group {
     }
 
     public void start(Pane pane, double x, double y) {
+        final Duration duration = Duration.millis(1000);
+
         ScaleTransition scaleTransition = new ScaleTransition();
         scaleTransition.setNode(this);
-        scaleTransition.setDuration(Duration.millis(1000));
-        scaleTransition.setByX(1.5);
-        scaleTransition.setByY(1.5);
-        scaleTransition.setCycleCount(1);
+        scaleTransition.setDuration(duration);
+        scaleTransition.setByX(1);
+        scaleTransition.setByY(scaleTransition.getByX());
 
         TranslateTransition translateTransition = new TranslateTransition();
         translateTransition.setNode(this);
-        translateTransition.setDuration(Duration.millis(1000));
+        translateTransition.setDuration(duration);
         translateTransition.setToX(x);
         translateTransition.setToY(y);
-        translateTransition.setCycleCount(1);
 
         ParallelTransition parallelTransition = new ParallelTransition();
         parallelTransition.getChildren().addAll(scaleTransition, translateTransition);
-        parallelTransition.setCycleCount(1);
-        parallelTransition.setAutoReverse(false);
         parallelTransition.setOnFinished(actionEvent -> pane.getChildren().remove(this));
         parallelTransition.play();
     }
