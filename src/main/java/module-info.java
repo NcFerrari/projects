@@ -6,4 +6,5 @@ module projects {
 
     exports lp.molekuly;
     exports lp.hvezdy;
+    exports lp.waterfall;
 }

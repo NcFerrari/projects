@@ -1,8 +1,6 @@
 package lp;
 
 import lp.molekuly.Molecule;
-import lp.hvezdy.Souhvezdi;
-import lp.hvezdy.Variants;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,6 +26,6 @@ public class Manager {
     }
 
     public static void main(String[] args) {
-        javafx.application.Application.launch(Souhvezdi.class, Variants.G.name());
+        javafx.application.Application.launch(lp.waterfall.App.class);
     }
 }
